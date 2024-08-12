@@ -3,6 +3,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
 
+const documentroute=require('./routes/documentroutes');
+
 const app = express();
 const server = http.createServer(app);
 
@@ -33,6 +35,9 @@ io.on('connection', (socket) => {
     });
 });
 
+
+app.use('/api',documentroute);
+
 server.listen(5003, () => {
-    console.log('Server running on port 5002');
+    console.log('Server running on port 5003');
 });

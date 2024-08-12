@@ -4,6 +4,10 @@ import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 import axios from 'axios';
 import {io} from 'socket.io-client';
 
+import {Documenteditor} from './Document_editor';
+import {Roleprovider} from './Rolecontext';
+
+
 const socket=io('http://localhost:5002');
 
 // Event listener for successful connection
@@ -35,18 +39,24 @@ socket.on('disconnect', (reason) => {
 
 const App=()=>{
     return(
-        <Router>
-            <Routes>
-                <Route path="/signup" element={<Signup/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/login1" element={<Login1/>}/>
-                <Route path="/Protected" element={<Protected/>}/>
-                <Route path="/editor" element={<Collaborativeeditor/>}/>  
-                <Route path="/realtime" element={<Realtimecomponent/>}/>
+        // <Router>
+        //     <Routes>
+        //         <Route path="/signup" element={<Signup/>}/>
+        //         <Route path="/login" element={<Login/>}/>
+        //         <Route path="/login1" element={<Login1/>}/>
+        //         <Route path="/Protected" element={<Protected/>}/>
+        //         <Route path="/editor" element={<Collaborativeeditor/>}/>  
+        //         <Route path="/realtime" element={<Realtimecomponent/>}/>
+        //         <Route path="/documenteditor" element={<Documenteditor/>}/>
+        //         <Route path="/roleprovider" element={< Roleprovider/>}/>
                 
-                <Route from="/"  to="/login"/>
-            </Routes>
-        </Router>
+        //         <Route from="/"  to="/login"/>
+        //     </Routes>
+        // </Router>
+
+        <Roleprovider>
+      <Documenteditor />
+    </Roleprovider>
     );
 };
 
