@@ -1,9 +1,9 @@
 import React from 'react';
-import {userole} from './Rolecontext';
+import {useRole} from './Rolecontext';
 
 const Documenteditor=()=>{
 
-    const {haspermision}=userole();
+    const {haspermision}=useRole();
     return(
         <div>
             {haspermision('createdocument')&&(

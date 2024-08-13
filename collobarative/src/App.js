@@ -39,30 +39,30 @@ socket.on('disconnect', (reason) => {
 
 const App=()=>{
     return(
-        // <Router>
-        //     <Routes>
-        //         <Route path="/signup" element={<Signup/>}/>
-        //         <Route path="/login" element={<Login/>}/>
+        <Router>
+            <Routes> 
+                <Route path="/signup" element={<SignupForm/>}/>
+        {/* //         <Route path="/login" element={<Login/>}/>
         //         <Route path="/login1" element={<Login1/>}/>
         //         <Route path="/Protected" element={<Protected/>}/>
         //         <Route path="/editor" element={<Collaborativeeditor/>}/>  
         //         <Route path="/realtime" element={<Realtimecomponent/>}/>
         //         <Route path="/documenteditor" element={<Documenteditor/>}/>
-        //         <Route path="/roleprovider" element={< Roleprovider/>}/>
-                
-        //         <Route from="/"  to="/login"/>
-        //     </Routes>
-        // </Router>
+        //         <Route path="/roleprovider" element={< Roleprovider/>}/>     */}
+                 {/* <Route path="/signup"  element={<SignupForm/ >}/> */}
+             </Routes>
+         </Router>
 
-        <Roleprovider>
-      <Documenteditor />
-    </Roleprovider>
+    //     <Roleprovider>
+    //   <Documenteditor />
+    // </Roleprovider>
     );
 };
 
 const Signup=()=>{
     const [username,setusername]=useState('');
     const [password,setpassword]=useState('');
+    const [role, setrole] = useState('user');
 
 const handlesignup=async()=>{
 
@@ -237,6 +237,55 @@ const Collaborativeeditor=()=>{
         </div>
     )
 };
+
+
+const SignupForm = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('user'); // Default role
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const userData = { username, password, role };
+  
+      try {
+        const response = await axios.post('http://localhost:5000/signup', userData);
+        alert(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while creating the user.');
+      }
+    };
+  
+    return (
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        </div>
+        <div>
+          <label>Role:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)} required>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <button type="submit">Sign Up</button>
+      </form>
+    );
+  };
+  
+//   export default SignupForm;
+
+
+
+
+
         export default App;
 
 

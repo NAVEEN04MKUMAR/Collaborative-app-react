@@ -1,7 +1,7 @@
 import React,{createContext,useContext,useState} from 'react';
 const Rolecontext=createContext();
 
-export const userole = () => {
+export const useRole = () => {
   return useContext(Rolecontext);
 };
 
