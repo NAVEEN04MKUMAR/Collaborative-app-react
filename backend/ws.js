@@ -1,11 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const User = require('./model/user.js'); // Ensure correct path
+const User = require('./model/rollschema'); // Ensure correct path
 const bcrypt = require('bcryptjs');
 const app = express();
 const cors = require('cors');
+const jwt=require('jsonwebtoken');
+
+const jwt_secret = 'ed115beb62651108a829bd370f097a4507724032588b029b235d2e778f09045a27a065827bdf716505ebcbab27ea328b5ef40234f0ef45cf46cd43f1335a77cf';
 
 
+
+//connect to database
+mongoose.connect('mongodb+srv://livepolling:livepolling@cluster0.zrr81ak.mongodb.net/')
+.then(() => console.log('Database connected'))
+.catch(err => console.log('Database connection error:', err));
 
 
 
@@ -26,26 +34,48 @@ app.get('/test', (req, res) => {
 
 app.post('/signup', async (req, res) => {
   console.log("Inside signup");
-  const { username, password, role } = req.body;
+  const { username, email, password, role } = req.body;
   console.log(`Signup request received: ${username}`);
+  console.log(`Signup request received: ${email}`);
 
 
 
-  if (!username || !password || !role) {
-    console.log('Username, password, or role missing');
-    return res.status(400).send('Username, password, or role missing');
+  if (!username || !email || !password || !role) {
+    console.log('Username, email, password, or role missing');
+    return res.status(400).send('Username, email, password, or role missing');
   }
   try {
     // const hashedPassword = await bcrypt.hash(password, 10);
-    // const user1 = new User({ username, password: hashedPassword, role });
-    // await user1.save();
-    // console.log(`User created: ${username}`);
+    const user1 = new User({ username,email, password, role });
+    await user1.save();
+    console.log(`User created: ${username}`);
     res.status(201).send('User created');
   } catch (err) {
     console.log('Error creating user:', err);
     res.status(500).send('Error creating user');
+
   }
 });
+//login
+app.post('/login',async(req,res)=>{
+  const {email,password}=req.body;
+  console.log(`login request received:${email}`);
+  const user2=await User.findOne({email});
+  if(!user2){
+      console.log(`user not found:${email}`);
+      return res.status(400).send('user not found');
+  }
+  // const ispasswordvalid=await bcrypt.compare(password,user2.password);
+  // if(!ispasswordvalid){
+  //     console.log(`invalid password for user:${email}`);
+  //     return res.status(400).send('invalid password');
+  // }
+  const token=jwt.sign({userId:user2._id},jwt_secret,{expiresIn:'1h'})
+  console.log(`token generated for user:${email}`);
+  res.json({token});
+
+});
+
 
 // Fallback route
 app.use((req, res) => {
@@ -53,10 +83,6 @@ app.use((req, res) => {
 });
 
 
-//connect to database
-mongoose.connect('mongodb+srv://livepolling:livepolling@cluster0.zrr81ak.mongodb.net/')
-.then(() => console.log('Database connected'))
-.catch(err => console.log('Database connection error:', err));
 
 app.listen(5000, () => console.log('Server running on port 5000'));
 
@@ -126,26 +152,6 @@ app.listen(5000, () => console.log('Server running on port 5000'));
 // // });
 
 
-// app.post('/signup',async(req,res)=>{
-//     console.log("inside signup");
-//     const {username,password,role}=req.body;
-//     console.log(`signup request received:${username}`);
-
-//      if (!username || !password || !role) {
-//     console.log('Username or password or role missing');
-//     return res.status(400).send('Username or password or role missing');
-//   }
-//   try {
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const user1 = new User({ username, password: hashedPassword,role});
-//     await user1.save();
-//     console.log(`User created: ${username}`);
-//     res.status(201).send('User created');
-//   } catch (err) {
-//     console.log('Error creating user:', err);
-//     res.status(500).send('Error creating user');
-//   }
-// });
 
 
 

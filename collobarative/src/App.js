@@ -4,8 +4,8 @@ import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 import axios from 'axios';
 import {io} from 'socket.io-client';
 
-import {Documenteditor} from './Document_editor';
-import {Roleprovider} from './Rolecontext';
+// import {Documenteditor} from './Document_editor';
+// import {Roleprovider} from './Rolecontext';
 
 
 const socket=io('http://localhost:5002');
@@ -42,8 +42,8 @@ const App=()=>{
         <Router>
             <Routes> 
                 <Route path="/signup" element={<SignupForm/>}/>
-        {/* //         <Route path="/login" element={<Login/>}/>
-        //         <Route path="/login1" element={<Login1/>}/>
+                 <Route path="/login" element={<Login/>}/>
+        {/*//         <Route path="/login1" element={<Login1/>}/>
         //         <Route path="/Protected" element={<Protected/>}/>
         //         <Route path="/editor" element={<Collaborativeeditor/>}/>  
         //         <Route path="/realtime" element={<Realtimecomponent/>}/>
@@ -59,71 +59,8 @@ const App=()=>{
     );
 };
 
-const Signup=()=>{
-    const [username,setusername]=useState('');
-    const [password,setpassword]=useState('');
-    const [role, setrole] = useState('user');
-
-const handlesignup=async()=>{
-
-    const response=await axios.post('/signup',{username,password});
-    localStorage.setItem('role',response.data.role)
-    alert('usercreated');
-};
-
-    return(
-    <div>
-        <h1>Signup</h1>
-        <input 
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e)=>setusername(e.target.value)}
-        />
-        <input 
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={(e)=>setpassword(e.target.value)}
-        />
-       <button onClick={handlesignup}>Signup</button>
-    </div>
-    );
-};
-
-const Login=()=>{
-    const [username,setusername]=useState('');
-    const [password,setpassword]=useState('');
-    const [token,settoken]=useState(localStorage.getItem('token'||''));
 
 
-const handlelogin=async()=>{
-   const response=await axios.post('/login',{username,password});
-   settoken(response.data.token);
-   localStorage.setItem('token',response.data.token);
-   localStorage.setItem('role',response.data.role);
-
-};
-
-    return(
-    <div>
-        <h1>Login</h1>
-        <input 
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e)=>setusername(e.target.value)}
-        />
-        <input 
-        type="text"
-        placeholder="password"
-        value={password}
-        onChange={(e)=>setpassword(e.target.value)}
-        />
-       <button onClick={handlelogin}>Login</button>
-    </div>
-    );
-};
 
 const Login1=()=>{
     const handlegooglelogin=()=>{
@@ -241,21 +178,32 @@ const Collaborativeeditor=()=>{
 
 const SignupForm = () => {
     const [username, setUsername] = useState('');
+    const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('user'); // Default role
   
     const handleSubmit = async (e) => {
       e.preventDefault();
   
-      const userData = { username, password, role };
+      const userData = { username,email, password, role };
   
       try {
         const response = await axios.post('http://localhost:5000/signup', userData);
         alert(response.data);
       } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while creating the user.');
-      }
+        if (error.response) {
+            // Server responded with a status other than 2xx
+            console.error('Login failed:', error.response.data.message);
+            alert(error.response.data.message || 'Login failed. Please try again.');
+        } else if (error.request) {
+            // Request was made but no response received
+            console.error('No response received:', error.request);
+            alert('No response received from server. Please check your network.');
+        } else {
+            // Something else happened while setting up the request
+            console.error('Error:', error.message);
+            alert('An error occurred during login. Please try again.');
+        }      }
     };
   
     return (
@@ -263,6 +211,10 @@ const SignupForm = () => {
         <div>
           <label>Username:</label>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input type="text" value={email} onChange={(e) => setemail(e.target.value)} required />
         </div>
         <div>
           <label>Password:</label>
@@ -281,6 +233,55 @@ const SignupForm = () => {
   };
   
 //   export default SignupForm;
+
+const Login = () => {
+    const [email, setemail] = useState('');
+    const [password, setpassword] = useState('');
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:5000/login', { email, password });
+            const token = response.data.token;
+            localStorage.setItem('token', token); 
+        } catch (error) {
+            if (error.response) {
+                // Server responded with a status other than 2xx
+                console.error('Login failed:', error.response.data.message);
+                alert(error.response.data.message || 'Login failed. Please try again.');
+            } else if (error.request) {
+                // Request was made but no response received
+                console.error('No response received:', error.request);
+                alert('No response received from server. Please check your network.');
+            } else {
+                // Something else happened while setting up the request
+                console.error('Error:', error.message);
+                alert('An error occurred during login. Please try again.');
+            }           }
+    };
+
+    return (
+        <form onSubmit={handleLogin}>
+            <input
+                type="email"
+                value={email}
+                onChange={(e) => setemail(e.target.value)}
+                placeholder="Email"
+                required
+            />
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
+                placeholder="Password"
+                required
+            />
+            <button type="submit">Login</button>
+        </form>
+    );
+};
+
+// export default Login;
 
 
 

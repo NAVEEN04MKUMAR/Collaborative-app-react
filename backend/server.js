@@ -92,7 +92,7 @@ app.use(passport.initialize());
 
 
 
-
+//google oauth
 passport.use(new googlestrategy({
     clientID:'167791506952-nso9e3t98lamqbqqboi0pnfjdl0849t2.apps.googleusercontent.com',
     clientSecret:'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',
@@ -127,6 +127,17 @@ app.get('/protected',(req,res)=>{
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
 app.get('/admin',passport.authenticate('jwt',{session:false}),checkrole(['admin']),(req,res)=>{
     res.send('this is an admin route');
 });
@@ -144,27 +155,6 @@ mongoose.connect('mongodb+srv://pwskills:pwskills@cluster0.zrr81ak.mongodb.net/p
 .catch(err => console.log('Database connection error:', err));
 
 
-//signup
-app.post('/signup',async(req,res)=>{
-    console.log("inside signup");
-    const {username,password,role}=req.body;
-    console.log(`signup request received:${username}`);
-
-     if (!username || !password || !role) {
-    console.log('Username or password or role missing');
-    return res.status(400).send('Username or password or role missing');
-  }
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user1 = new user({ username, password: hashedPassword,role});
-    await user1.save();
-    console.log(`User created: ${username}`);
-    res.status(201).send('User created');
-  } catch (err) {
-    console.log('Error creating user:', err);
-    res.status(500).send('Error creating user');
-  }
-});
 
 //login
 app.post('/login',async(req,res)=>{
