@@ -20,6 +20,27 @@ mongoose.connect('mongodb+srv://livepolling:livepolling@cluster0.zrr81ak.mongodb
 app.use(express.json());
  app.use(cors());
 
+
+// Apply CORS middleware
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
+const io=new Server(server,{
+  cors:{
+    origin:"http://localhost:3000",
+    methods:["GET","POST"],
+    credentials:true
+  }
+});
+
+
+
+
+
+
 // Serve favicon
 app.get('/favicon.ico', (req, res) => res.status(204).send());
 
