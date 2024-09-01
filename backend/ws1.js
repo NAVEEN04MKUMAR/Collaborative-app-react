@@ -83,6 +83,16 @@ io.on('connection',(socket)=>{
     });
   });
 
+  // Send the initial data to the new client
+  socket.emit('cell-update', spreadsheetData);
+
+  // Handle cell updates
+  socket.on('update-cell', (updatedata) => {
+      spreadsheetData = updatedata;
+      // Broadcast the update to all connected clients
+      socket.broadcast.emit('cell-update', updatedata);
+  });
+  
   socket.on('disconnect',()=>{
     console.log('user disconneced',socket.id);
   });
@@ -368,13 +378,39 @@ app.get('/comments/:documentid',async(req,res)=>{
 });
 
 
+// In-memory storage for spreadsheet data
+let spreadsheetData = [
+  ['', 'A', 'B', 'C'],
+  ['1', '', '', ''],
+  ['2', '', '', ''],
+  ['3', '', '', ''],
+];
+
+// Serve static files (e.g., frontend assets)
+app.use(express.static('public'));
+
+// Get spreadsheet data
+app.get('/spreadsheet', (req, res) => {
+  res.json(spreadsheetData);
+});
+
+// Update spreadsheet data
+app.post('/spreadsheet', (req, res) => {
+  const { data } = req.body;
+  if (Array.isArray(data)) {
+      spreadsheetData = data;
+      res.status(200).json({ message: 'Spreadsheet data updated successfully' });
+  } else {
+      res.status(400).json({ error: 'Invalid data format' });
+  }
+});
 
 
 
 
 
   
-const PORT = 5000;
+const PORT = 5001;
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

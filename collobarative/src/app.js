@@ -11,7 +11,7 @@ import Handsontable from 'handsontable';
 import {HotTable} from '@handsontable/react';
 import { response } from 'express';
 import 'handsontable/dist/handsontable.full.css';
-import 'whatwg-fetch';
+// import 'whatwg-fetch';
 
 
 // import {Documenteditor} from './Document_editor';
@@ -60,11 +60,13 @@ return(
             <Routes> 
                 {/* <Route path="/signup" element={<SignupForm/>}/>
                <Route path="/texteditor" element={<Texteditor/>}/> */}
-               <Route path="/create" element={<Createdoument/>}/>
+              
+               {/* <Route path="/create" element={<Createdoument/>}/>
                <Route path="/documents/:id/history" element={<Documenthistory/>}/>
                <Route path="/document" element={<Document/>}/>
-               <Route path="/update/:id" element={<Updatedoument/>}/>
+               <Route path="/update/:id" element={<Updatedoument/>}/> */}
 
+<Route path="/sheet" element={<Spreadsheet/>}/> 
 
 
                {/* <Route path="/documenteditor" element={<Documenteditor/>}/> */}
@@ -83,35 +85,35 @@ return(
 
 
 
- const Notificationsystem=()=>{
-    const [notification,setnotification]=useState([]);
+//  const Notificationsystem=()=>{
+//     const [notification,setnotification]=useState([]);
 
-    useEffect(()=>{
+//     useEffect(()=>{
 
-        socket.on('receive-notification',(notification)=>{
-            setnotification((prevnotifications)=>[notification,...prevnotifications]);
-        });
+//         socket.on('receive-notification',(notification)=>{
+//             setnotification((prevnotifications)=>[notification,...prevnotifications]);
+//         });
 
-        return ()=>{
-            socket.off('receive-notification');
-        }
-    },[]);
+//         return ()=>{
+//             socket.off('receive-notification');
+//         }
+//     },[]);
 
-    return(
-        <div>
-            <h3>
-                Notifications
-            </h3>
-            {/* <ul>
-                {notification.map(()=>(
-                    <li key={index}>
-                        {notification.message}
-                    </li>
-                ))}
-            </ul> */}
-        </div>
-    );
- };
+//     return(
+//         <div>
+//             <h3>
+//                 Notifications
+//             </h3>
+//             {/* <ul>
+//                 {notification.map(()=>(
+//                     <li key={index}>
+//                         {notification.message}
+//                     </li>
+//                 ))}
+//             </ul> */}
+//         </div>
+//     );
+//  };
 
 const Spreadsheet=()=>{
     const [data,setdata]=useState([
@@ -174,105 +176,130 @@ const Spreadsheet=()=>{
 
 
 
-const Signup=()=>{
-    const [username,setusername]=useState('');
-    const [password,setpassword]=useState('');
-    const [role, setrole] = useState('user');
-
-const handlesignup=async()=>{
-
-    const response=await axios.post('/signup',{username,password});
-    localStorage.setItem('role',response.data.role)
-    alert('usercreated');
-};
-
-    return(
-    <div>
-        <h1>Signup</h1>
-        <input 
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e)=>setusername(e.target.value)}
-        />
-        <input 
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={(e)=>setpassword(e.target.value)}
-        />
-       <button onClick={handlesignup}>Signup</button>
-    </div>
-    );
-};
-
-const Login=()=>{
-    const [username,setusername]=useState('');
-    const [password,setpassword]=useState('');
-    const [token,settoken]=useState(localStorage.getItem('token'||''));
 
 
-const handlelogin=async()=>{
-   const response=await axios.post('/login',{username,password});
-   settoken(response.data.token);
-   localStorage.setItem('token',response.data.token);
-   localStorage.setItem('role',response.data.role);
 
-};
 
-    return(
-    <div>
-        <h1>Login</h1>
-        <input 
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e)=>setusername(e.target.value)}
-        />
-        <input 
-        type="text"
-        placeholder="password"
-        value={password}
-        onChange={(e)=>setpassword(e.target.value)}
-        />
-       <button onClick={handlelogin}>Login</button>
-    </div>
-    );
-};
 
-const Login1=()=>{
-    const handlegooglelogin=()=>{
-        // useEffect(()=>{
-            window.location.href='http://localhost:5002/auth/google';
-        //},[]);
-    };
-    return(
-        <div>
-            <h1>Login</h1>
-            <button onClick={handlegooglelogin}>login with google</button>
-        </div>
-    );
-};
 
-const Protected=()=>{
-    const [user,setuser]=useState(null);
-    useEffect(()=>{
-        const token=new URLSearchParams(window.location.search).get('token');
-        if(token){
-            localStorage.setitem('token',token);
-            axios.get('/protected',{
-                headers:{
-                    'Authorization':token
-                }
-            }).then(response=>{
-                setuser(response.data);
-            }).catch(error=>{
-                console.error('error fetching protected route',error);
-            });
-        }
-    },[]);
-    return user?<h1>Welcome,{user.name}</h1>:<h1>Loading...</h1>
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const Signup=()=>{
+//     const [username,setusername]=useState('');
+//     const [password,setpassword]=useState('');
+//     const [role, setrole] = useState('user');
+
+// const handlesignup=async()=>{
+
+//     const response=await axios.post('/signup',{username,password});
+//     localStorage.setItem('role',response.data.role)
+//     alert('usercreated');
+// };
+
+//     return(
+//     <div>
+//         <h1>Signup</h1>
+//         <input 
+//         type="text"
+//         placeholder="username"
+//         value={username}
+//         onChange={(e)=>setusername(e.target.value)}
+//         />
+//         <input 
+//         type="password"
+//         placeholder="password"
+//         value={password}
+//         onChange={(e)=>setpassword(e.target.value)}
+//         />
+//        <button onClick={handlesignup}>Signup</button>
+//     </div>
+//     );
+// };
+
+// const Login=()=>{
+//     const [username,setusername]=useState('');
+//     const [password,setpassword]=useState('');
+//     const [token,settoken]=useState(localStorage.getItem('token'||''));
+
+
+// const handlelogin=async()=>{
+//    const response=await axios.post('/login',{username,password});
+//    settoken(response.data.token);
+//    localStorage.setItem('token',response.data.token);
+//    localStorage.setItem('role',response.data.role);
+
+// };
+
+//     return(
+//     <div>
+//         <h1>Login</h1>
+//         <input 
+//         type="text"
+//         placeholder="username"
+//         value={username}
+//         onChange={(e)=>setusername(e.target.value)}
+//         />
+//         <input 
+//         type="text"
+//         placeholder="password"
+//         value={password}
+//         onChange={(e)=>setpassword(e.target.value)}
+//         />
+//        <button onClick={handlelogin}>Login</button>
+//     </div>
+//     );
+// };
+
+// const Login1=()=>{
+//     const handlegooglelogin=()=>{
+//         // useEffect(()=>{
+//             window.location.href='http://localhost:5002/auth/google';
+//         //},[]);
+//     };
+//     return(
+//         <div>
+//             <h1>Login</h1>
+//             <button onClick={handlegooglelogin}>login with google</button>
+//         </div>
+//     );
+// };
+
+// const Protected=()=>{
+//     const [user,setuser]=useState(null);
+//     useEffect(()=>{
+//         const token=new URLSearchParams(window.location.search).get('token');
+//         if(token){
+//             localStorage.setitem('token',token);
+//             axios.get('/protected',{
+//                 headers:{
+//                     'Authorization':token
+//                 }
+//             }).then(response=>{
+//                 setuser(response.data);
+//             }).catch(error=>{
+//                 console.error('error fetching protected route',error);
+//             });
+//         }
+//     },[]);
+//     return user?<h1>Welcome,{user.name}</h1>:<h1>Loading...</h1>
+// };
 
 
 // const Realtimecomponent=()=>{
@@ -513,345 +540,367 @@ const Protected=()=>{
 onChange={handlechange1}/>
  */}
 
- const Createdoument=()=>{
-    const [tittle,settittle]=useState('');
-    const [content,setcontent]=useState('');
-    const [author,setauthor]=useState('');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+//  const Createdoument=()=>{
+//     const [tittle,settittle]=useState('');
+//     const [content,setcontent]=useState('');
+//     const [author,setauthor]=useState('');
     
-    const handlechange2=async(e)=>{
+//     const handlechange2=async(e)=>{
 
-        const documentdata={
-            tittle:tittle,
-            content:content,
-            author:author
-        };
+//         const documentdata={
+//             tittle:tittle,
+//             content:content,
+//             author:author
+//         };
 
-        try{
-            const response=await axios.post('http://localhost:5000/documents/create',documentdata);
-            console.log('document created',response.data)
+//         try{
+//             const response=await axios.post('http://localhost:5000/documents/create',documentdata);
+//             console.log('document created',response.data)
 
-        }
-        catch(error){
-            console.error('error creating document',error.response?error.response.data:error.message)
+//         }
+//         catch(error){
+//             console.error('error creating document',error.response?error.response.data:error.message)
 
-        }
-    }
-    return (
-        <form onSubmit={handlechange2}>
-            <div>
-                <label>Tittle:</label>
-                <input type="text" value={tittle} onChange={(e)=>settittle(e.target.value)}/>
-            </div>
+//         }
+//     }
+//     return (
+//         <form onSubmit={handlechange2}>
+//             <div>
+//                 <label>Tittle:</label>
+//                 <input type="text" value={tittle} onChange={(e)=>settittle(e.target.value)}/>
+//             </div>
 
-            <div>
-                <label>Content:</label>
-                <textarea value={content} onChange={(e)=>setcontent(e.target.value)}/>
-            </div>
+//             <div>
+//                 <label>Content:</label>
+//                 <textarea value={content} onChange={(e)=>setcontent(e.target.value)}/>
+//             </div>
 
-            <div>
-                <label>Author:</label>
-                <input type="text" value={author} onChange={(e)=>setauthor(e.target.value)}/>
-            </div>
-<button type="submit">create the document</button>
-        </form>
-    );
+//             <div>
+//                 <label>Author:</label>
+//                 <input type="text" value={author} onChange={(e)=>setauthor(e.target.value)}/>
+//             </div>
+// <button type="submit">create the document</button>
+//         </form>
+//     );
 
     
 
- };
+//  };
 
- const Updatedoument=()=>{
-    const {id}=useParams();
-    const [document,setdocument]=useState(null);
-    const [newcontent,setnewcontent]=useState('');
-    const [author,setauthor]=useState('');
+//  const Updatedoument=()=>{
+//     const {id}=useParams();
+//     const [document,setdocument]=useState(null);
+//     const [newcontent,setnewcontent]=useState('');
+//     const [author,setauthor]=useState('');
     
-    useEffect(()=>{
-    const fetchdocument=async()=>{
-        try{
-            const response=await axios.get(`http://localhost:5000/documents/${id}`);
-            setdocument(response.data.document);
-            setnewcontent(response.data.document.content);
+//     useEffect(()=>{
+//     const fetchdocument=async()=>{
+//         try{
+//             const response=await axios.get(`http://localhost:5000/documents/${id}`);
+//             setdocument(response.data.document);
+//             setnewcontent(response.data.document.content);
 
-        }
-        catch(error){
-            console.error('error creating document',error.response?error.response.data:error.message)
+//         }
+//         catch(error){
+//             console.error('error creating document',error.response?error.response.data:error.message)
 
-        }
-    }
-    fetchdocument();
-    },[id]);
-
-
-
-    useEffect(()=>{
-        socket.on('document-updated',(notification)=>{
-            console.log('document updated notification',notification);
-        })
-        // Cleanup on component unmount
-        return () => {
-            socket.off('document-updated');
-        };
-
-    },[]);
-
-    const handlechange3=async(e)=>{
-        const updatedata={
-            newcontent:newcontent,
-            author:author,
-        };
-
-        try{
-            const response=await axios.post(`http://localhost:5000/documents/${id}/update`,updatedata);
-            console.log('document updated',response.data.message)
-        }
-        catch(error){
-            console.error('error updating document',error.response?error.response.data:error.message)
-
-        }
-    }
-
-    if (!document) return <p>Loading...</p>;
+//         }
+//     }
+//     fetchdocument();
+//     },[id]);
 
 
 
-    return (
-        <div>
-            <h1>Update document</h1>
-        <form onSubmit={handlechange3}>
-            <div>
-                <label>Tittle:</label>
-                <input type="text" value={document.tittle}/>
-            </div>
+//     useEffect(()=>{
+//         socket.on('document-updated',(notification)=>{
+//             console.log('document updated notification',notification);
+//         })
+//         // Cleanup on component unmount
+//         return () => {
+//             socket.off('document-updated');
+//         };
 
-            <div>
-                <label>Content:</label>
-                <textarea value={newcontent}
-                onChange={(e)=>setnewcontent(e.target.value)}
-                required
-                />
-            </div>
+//     },[]);
 
-            <div>
-                <label>Author:</label>
-                <input 
-                type="text" 
-                value={author} 
-                onChange={(e)=>setauthor(e.target.value)}
-                required/>
-            </div>
-<button type="submit">Updatedoument</button>
-        </form>
-        </div>
-    );
+//     const handlechange3=async(e)=>{
+//         const updatedata={
+//             newcontent:newcontent,
+//             author:author,
+//         };
 
-}
-function Documenthistory({}){
-      const { id } = useParams();
-    console.log('inside the document history');
-     const [versions,setversions]=useState([]);
+//         try{
+//             const response=await axios.post(`http://localhost:5000/documents/${id}/update`,updatedata);
+//             console.log('document updated',response.data.message)
+//         }
+//         catch(error){
+//             console.error('error updating document',error.response?error.response.data:error.message)
+
+//         }
+//     }
+
+//     if (!document) return <p>Loading...</p>;
+
+
+
+//     return (
+//         <div>
+//             <h1>Update document</h1>
+//         <form onSubmit={handlechange3}>
+//             <div>
+//                 <label>Tittle:</label>
+//                 <input type="text" value={document.tittle}/>
+//             </div>
+
+//             <div>
+//                 <label>Content:</label>
+//                 <textarea value={newcontent}
+//                 onChange={(e)=>setnewcontent(e.target.value)}
+//                 required
+//                 />
+//             </div>
+
+//             <div>
+//                 <label>Author:</label>
+//                 <input 
+//                 type="text" 
+//                 value={author} 
+//                 onChange={(e)=>setauthor(e.target.value)}
+//                 required/>
+//             </div>
+// <button type="submit">Updatedoument</button>
+//         </form>
+//         </div>
+//     );
+
+// }
+// function Documenthistory({}){
+//       const { id } = useParams();
+//     console.log('inside the document history');
+//      const [versions,setversions]=useState([]);
      
-     useEffect(()=>{
-        const fetchhistory=async()=>{
-            console.log(`Fetching history for document ID: ${id}`);
-         try{
-            const response = await axios.get(`http://localhost:5000/documents/${id}/history`);
-            // Axios automatically parses the response as JSON
-            console.log('Document history data:', response.data);
-            setversions(response.data);     
-           }catch(error){
-            console.error('Error fetching document history:', error.response ? error.response.data : error.message);
-             alert('Failed to fetch document history.');
+//      useEffect(()=>{
+//         const fetchhistory=async()=>{
+//             console.log(`Fetching history for document ID: ${id}`);
+//          try{
+//             const response = await axios.get(`http://localhost:5000/documents/${id}/history`);
+//             // Axios automatically parses the response as JSON
+//             console.log('Document history data:', response.data);
+//             setversions(response.data);     
+//            }catch(error){
+//             console.error('Error fetching document history:', error.response ? error.response.data : error.message);
+//              alert('Failed to fetch document history.');
     
-        }
-        };
-        fetchhistory();
-    },[id]);
+//         }
+//         };
+//         fetchhistory();
+//     },[id]);
     
 
-const handlerevert=async(versionnumber)=>{
-    // try{
-        console.log(`Reverting document ${id} to version ${versionnumber}`);
-        const response=await axios.post(`http://localhost:5000/documents/${id}/revert`,{
-            versionnumber:versionnumber
-        });
-        // const data=await response.json();
-        console.log('Revert document response:', response.data);
-        if (response.status === 200) {
-            alert(`Document successfully reverted to version ${versionnumber}`);
-        } else {
-            alert(`Failed to revert document: ${response.data.message}`);
-        }
-}
+// const handlerevert=async(versionnumber)=>{
+//     // try{
+//         console.log(`Reverting document ${id} to version ${versionnumber}`);
+//         const response=await axios.post(`http://localhost:5000/documents/${id}/revert`,{
+//             versionnumber:versionnumber
+//         });
+//         // const data=await response.json();
+//         console.log('Revert document response:', response.data);
+//         if (response.status === 200) {
+//             alert(`Document successfully reverted to version ${versionnumber}`);
+//         } else {
+//             alert(`Failed to revert document: ${response.data.message}`);
+//         }
+// }
 
 
-    return (
-        <div>
-            <h2>Document version history</h2>
-          {versions.length>0?(
-             <ul>
-            {versions.map((version,index)=>(
-                <li key={index}>
-                    version {index+1}:{JSON.stringify(version)}
-                <strong>Version{version.versionnumber}</strong>
-                <p>Content: {version.content}</p>
-                <p>Edit by:{version.author}</p>
-                <p>Timestamp:{new Date(version.timestamp).toLocaleString()}</p>
-                <button onClick={()=>handlerevert(version.versionnumber)}>
-                Revert Document
-                </button>
-                </li>
-        ))}
-        </ul>
-    ):(
-    <p>No history available</p>
-    )}
+//     return (
+//         <div>
+//             <h2>Document version history</h2>
+//           {versions.length>0?(
+//              <ul>
+//             {versions.map((version,index)=>(
+//                 <li key={index}>
+//                     version {index+1}:{JSON.stringify(version)}
+//                 <strong>Version{version.versionnumber}</strong>
+//                 <p>Content: {version.content}</p>
+//                 <p>Edit by:{version.author}</p>
+//                 <p>Timestamp:{new Date(version.timestamp).toLocaleString()}</p>
+//                 <button onClick={()=>handlerevert(version.versionnumber)}>
+//                 Revert Document
+//                 </button>
+//                 </li>
+//         ))}
+//         </ul>
+//     ):(
+//     <p>No history available</p>
+//     )}
          
-        </div>
-      );
+//         </div>
+//       );
     
-}
-//Teams working on a document can highlight portions that need discussion or clarification and leave comments 
-//for teammates to review.Teams working on a document can highlight portions that need discussion or clarification and leave comments 
-//for teammates to review.
-const Commentmodal=({selectedtext,onSubmit})=>{
-    const [comment,setcomment]=useState('');
+// }
+// //Teams working on a document can highlight portions that need discussion or clarification and leave comments 
+// //for teammates to review.Teams working on a document can highlight portions that need discussion or clarification and leave comments 
+// //for teammates to review.
+// const Commentmodal=({selectedtext,onSubmit})=>{
+//     const [comment,setcomment]=useState('');
 
  
-    const handlesubmit=()=>{
-        onSubmit(comment);
-        setcomment('');//clear the input after submit
-    };
+//     const handlesubmit=()=>{
+//         onSubmit(comment);
+//         setcomment('');//clear the input after submit
+//     };
  
-     return (
-         <div className="comment-modal">
-            <h3>add a comment</h3>
-            <p>selected text:{selectedtext}</p>
-            <textarea
-            value={comment}
-            onChange={(e)=>setcomment(e.target.value)}
-            placeholder='add your comment'/>
-            <button onClick={handlesubmit}>Submit</button>
-         </div>
-       );
+//      return (
+//          <div className="comment-modal">
+//             <h3>add a comment</h3>
+//             <p>selected text:{selectedtext}</p>
+//             <textarea
+//             value={comment}
+//             onChange={(e)=>setcomment(e.target.value)}
+//             placeholder='add your comment'/>
+//             <button onClick={handlesubmit}>Submit</button>
+//          </div>
+//        );
     
-     };
+//      };
 
-const Document=()=>{
-   const [selectedtext,setselectedtext]=useState('');
-   const [showmodel,setshowmodel]=useState(false);
-   const [comments,setcomments]=useState([]);
-   const [documentcontent,setdocumentcontent]=useState('');
-    const documentid='66cad6775a571e8fdd67b69d';
-
-
-   const fetchedocument=async()=>{
-    try{
-        const response=await axios.get(`http://localhost:5000/documents/${documentid}`);
-        setdocumentcontent(response.data.content);
-    }catch(error){
-        if (error.response) {
-            // The request was made and the server responded with a status code that falls out of the range of 2xx
-            console.error('Error data:', error.response.data);
-            console.error('Error status:', error.response.status);
-            console.error('Error headers:', error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            console.error('No response received:', error.request);
-        } else {
-            // Something happened in setting up the request that triggered an error
-            console.error('Error message:', error.message);
-        }
-        console.error('Config:', error.config);  // This logs the request config    }
-}
-}
-
-   useEffect(()=>{
-    fetchedocument();
-
-socket.on('comment-added',(data)=>{
-    if(data.documentid===documentid){
-        setcomments((prevcomments)=>[prevcomments,data]);
-        alert(`new comment is added on "${data.selectedtext}":${data.text}`)
-    }
-});
-
-return()=>{
-    socket.off('comment-added');
-};
-   },[documentid]);
+// const Document=()=>{
+//    const [selectedtext,setselectedtext]=useState('');
+//    const [showmodel,setshowmodel]=useState(false);
+//    const [comments,setcomments]=useState([]);
+//    const [documentcontent,setdocumentcontent]=useState('');
+//     const documentid='66cad6775a571e8fdd67b69d';
 
 
-   const handletextselect=()=>{
-    const selectedtext=window.getSelection().toString();
-    if(selectedtext.trim()){
-        setselectedtext(selectedtext);
-        setshowmodel(true);//when we select the text it should show
-    }
-   };
+//    const fetchedocument=async()=>{
+//     try{
+//         const response=await axios.get(`http://localhost:5000/documents/${documentid}`);
+//         setdocumentcontent(response.data.content);
+//     }catch(error){
+//         if (error.response) {
+//             // The request was made and the server responded with a status code that falls out of the range of 2xx
+//             console.error('Error data:', error.response.data);
+//             console.error('Error status:', error.response.status);
+//             console.error('Error headers:', error.response.headers);
+//         } else if (error.request) {
+//             // The request was made but no response was received
+//             console.error('No response received:', error.request);
+//         } else {
+//             // Something happened in setting up the request that triggered an error
+//             console.error('Error message:', error.message);
+//         }
+//         console.error('Config:', error.config);  // This logs the request config    }
+// }
+// }
 
-   const handlecommentsubmit=async(comment)=>{
-    console.log(`Comment submitted: ${comment}`);
-    console.log(`Selected Text: ${selectedtext}`);
-    console.log(`Document ID: ${documentid}`);
-try{
-    const response=await axios.post('http://localhost:5000/comments',{
-        documentid: documentid,
-        selectedtext: selectedtext,
-        text: comment,
-});
-if (response.data) {
-    setcomments([...comments, response.data]);
-    console.log(`Comment successfully submitted: ${response.data.text}`);
-} else {
-    console.error('No data received from the server.');
-}}catch(error){
-    if (error.response) {
-        console.error('Error data:', error.response.data);
-        console.error('Error status:', error.response.status);
-        console.error('Error headers:', error.response.headers);
-    } else if (error.request) {
-        console.error('No response received:', error.request);
-    } else {
-        console.error('Error message:', error.message);
-    }
-    console.error('Config:', error.config);}
-    setshowmodel(false);
-   }
+//    useEffect(()=>{
+//     fetchedocument();
 
+// socket.on('comment-added',(data)=>{
+//     if(data.documentid===documentid){
+//         setcomments((prevcomments)=>[prevcomments,data]);
+//         alert(`new comment is added on "${data.selectedtext}":${data.text}`)
+//     }
+// });
+
+// return()=>{
+//     socket.off('comment-added');
+// };
+//    },[documentid]);
 
 
+//    const handletextselect=()=>{
+//     const selectedtext=window.getSelection().toString();
+//     if(selectedtext.trim()){
+//         setselectedtext(selectedtext);
+//         setshowmodel(true);//when we select the text it should show
+//     }
+//    };
 
-    return (
-        <div onMouseUp={handletextselect}>
-            <p>{documentcontent}</p>
+//    const handlecommentsubmit=async(comment)=>{
+//     console.log(`Comment submitted: ${comment}`);
+//     console.log(`Selected Text: ${selectedtext}`);
+//     console.log(`Document ID: ${documentid}`);
+// try{
+//     const response=await axios.post('http://localhost:5000/comments',{
+//         documentid: documentid,
+//         selectedtext: selectedtext,
+//         text: comment,
+// });
+// if (response.data) {
+//     setcomments([...comments, response.data]);
+//     console.log(`Comment successfully submitted: ${response.data.text}`);
+// } else {
+//     console.error('No data received from the server.');
+// }}catch(error){
+//     if (error.response) {
+//         console.error('Error data:', error.response.data);
+//         console.error('Error status:', error.response.status);
+//         console.error('Error headers:', error.response.headers);
+//     } else if (error.request) {
+//         console.error('No response received:', error.request);
+//     } else {
+//         console.error('Error message:', error.message);
+//     }
+//     console.error('Config:', error.config);}
+//     setshowmodel(false);
+//    }
+
+
+
+
+//     return (
+//         <div onMouseUp={handletextselect}>
+//             <p>{documentcontent}</p>
             
-              <div>
-                {comments.map((comment)=>(
-                    <div key={comment.id}>
-                    <p>
-                        <strong>
-                            {comment.selectedtext}
-                        </strong>:{comment.comment}
-                    </p>    
-                    </div> 
+//               <div>
+//                 {comments.map((comment)=>(
+//                     <div key={comment.id}>
+//                     <p>
+//                         <strong>
+//                             {comment.selectedtext}
+//                         </strong>:{comment.comment}
+//                     </p>    
+//                     </div> 
  
 
-                 ))} 
-            </div> 
+//                  ))} 
+//             </div> 
              
-            {showmodel&&(
-                <Commentmodal
-                selectedtext={selectedtext}
-                onSubmit={handlecommentsubmit}
-                />
-            )}
-        </div>
-      );
+//             {showmodel&&(
+//                 <Commentmodal
+//                 selectedtext={selectedtext}
+//                 onSubmit={handlecommentsubmit}
+//                 />
+//             )}
+//         </div>
+//       );
     
 
 
-    };
+//     };
 
 export default App;
 
